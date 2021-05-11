@@ -1,0 +1,15 @@
+{
+  "name": "winlossdraw-app",
+  "version": "0.0.1",
+  "description": "simple win loss draw app for me ig",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js"
+  },
+  "author": "batty",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "sqlite3": "^5.0.2"
+  }
+}

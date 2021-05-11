@@ -5,25 +5,31 @@
     <meta charset="UTF-8">
     <title>Index</title>
     <!--<script src="js/app.js" defer></script>-->
+    <style>
+        body{
+            background-color: #181818;
+            display: flex;
+            padding: 3px;
+        }
+        form{
+            margin-right: 7px;
+        }
+    </style>
 </head>
 
 <body>
     <form method="POST" action="/win">
-        <input type="button" name="win" value="Win">
+        <button name="win">Win</button>
     </form>
-    <br>
     <form method="POST" action="/draw">
-        <input type="button" name="draw" value="Draw">
+        <button name="draw">Draw</button>
     </form>
-    <br>
     <form method="POST" action="/loss">
-        <input type="button" name="loss" value="Loss">
+        <button name="loss">Loss</button>
     </form>
-    <br>
     <form method="POST" action="/init">
-        <input type="button" name="createdb" value="Create DB">
+        <button name="createdb">Create DB</button>
     </form>
-    <br>
 </body>
 
 </html>

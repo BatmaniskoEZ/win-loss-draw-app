@@ -10,17 +10,22 @@ app.use(http.json());
 
 app.post('/win',(req,res)=>{
     console.log("vyhra");
-    res.end();
+    res.redirect('./');
 });
 
 app.post('/draw',(req,res)=>{
     console.log("remiza");
-    res.end();
+    res.redirect('./');
 });
 
 app.post('/loss',(req,res)=>{
     console.log("prohra");
-    res.end();
+    res.redirect('./');
+});
+
+app.post('/test',(req,res)=>{
+    console.log("test");
+    res.redirect('./');
 });
 
 app.post('/init',(req,res)=>{
@@ -28,7 +33,7 @@ app.post('/init',(req,res)=>{
     db.serialize(()=>{
         db.run('CREATE TABLE data (win_count INT, draw_count INT, loss_count INT)');
     });
-    res.end();
+    res.redirect('./');
 });
 
 app.get('/',(req, res)=>{

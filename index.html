@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Index</title>
-    <!--<script src="js/app.js" defer></script>-->
+    <script src="js/app.js" defer></script>
     <style>
         body{
             background-color: #181818;
@@ -24,11 +24,14 @@
     <form method="POST" action="/draw">
         <button name="draw">Draw</button>
     </form>
-    <form method="POST" action="/loss">
+    <form class="newline" method="POST" action="/loss">
         <button name="loss">Loss</button>
     </form>
     <form method="POST" action="/init">
         <button name="createdb">Create DB</button>
+    </form>
+    <form method="POST" action="/reset">
+        <button name="reset">Reset DB</button>
     </form>
 </body>
 

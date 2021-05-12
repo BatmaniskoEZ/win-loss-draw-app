@@ -6,33 +6,50 @@
     <title>Index</title>
     <script src="js/app.js" defer></script>
     <style>
-        body{
+        body {
             background-color: #181818;
-            display: flex;
             padding: 3px;
+            display: flex;
+            color: aquamarine;
+            text-align: center;
         }
-        form{
-            margin-right: 7px;
+
+        .radek{
+            display:grid;
+            margin-right: 15px;
         }
     </style>
 </head>
 
 <body>
-    <form method="POST" action="/win">
-        <button name="win">Win</button>
-    </form>
-    <form method="POST" action="/draw">
-        <button name="draw">Draw</button>
-    </form>
-    <form class="newline" method="POST" action="/loss">
-        <button name="loss">Loss</button>
-    </form>
-    <form method="POST" action="/init">
-        <button name="createdb">Create DB</button>
-    </form>
-    <form method="POST" action="/reset">
-        <button name="reset">Reset DB</button>
-    </form>
+    <div class="radek">
+        <form method="POST" action="/win">
+            <button name="win">Win</button>
+            <p id="Wins">Hodnota</p>
+        </form>
+    </div>
+    <div class="radek">
+        <form method="POST" action="/draw">
+            <button name="draw">Draw</button>
+            <p id="Draws">Hodnota</p>
+        </form>
+    </div>
+    <div class="radek">
+        <form class="newline" method="POST" action="/loss">
+            <button name="loss">Loss</button>
+            <p id="Losses">Hodnota</p>
+        </form>
+    </div>
+    <div class="radek">
+        <form method="POST" action="/init">
+            <button name="createdb">Create DB</button>
+        </form>
+    </div>
+    <div class="radek">
+        <form method="POST" action="/reset">
+            <button name="reset">Reset DB</button>
+        </form>
+    </div>
 </body>
 
 </html>

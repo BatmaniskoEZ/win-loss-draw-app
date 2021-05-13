@@ -1,16 +1,17 @@
 const http = require('express');
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, globalShortcut } = require('electron');
 var path = require('path');
 const fs = require('fs');
 const sqlite3 = require('sqlite3').verbose();
 let db = new sqlite3.Database('data.db');
+const fetch = require('node-fetch');
 
 //elektron kod
 
-function createWindow () {
+function createWindow() {
     const win = new BrowserWindow({
-      width: 465,
-      height: 135
+        width: 465,
+        height: 135
     })
     win.removeMenu()
     win.loadURL('http://localhost:90/index.html')
@@ -23,23 +24,50 @@ function createWindow () {
     });*/
     win.setResizable(false);
     //console.log(__dirname);
-  }
-  
-  app.whenReady().then(() => {
-    createWindow()
-  
-    app.on('activate', () => {
-      if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow()
-      }
+
+    //listeners for shortcuts
+    globalShortcut.register('CmdOrCtrl+num7', () => {
+        fetch("http://localhost:90/win",{method: "POST"}).then(res=>{
+            //console.log("win");
+        });
+        win.loadURL('http://localhost:90/index.html');
     })
-  })
-  
-  app.on('window-all-closed', () => {
+
+    globalShortcut.register('CmdOrCtrl+num8', () => {
+        fetch("http://localhost:90/draw", 
+        { 
+            method: "POST",
+            body: {draw: ''},
+            headers: {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"}
+        }).then((res) => {
+            //console.log("draw");
+        });
+        win.loadURL('http://localhost:90/index.html');
+    })
+
+    globalShortcut.register('CmdOrCtrl+num9', () => {
+        fetch("http://localhost:90/loss", { method: "POST" }).then((res) => {
+            //console.log("loss");
+        });
+        win.loadURL('http://localhost:90/index.html');
+    })
+}
+
+app.whenReady().then(() => {
+    createWindow()
+
+    app.on('activate', () => {
+        if (BrowserWindow.getAllWindows().length === 0) {
+            createWindow()
+        }
+    })
+})
+
+app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
-      app.quit()
+        app.quit()
     }
-  })
+})
 
 //kod pro express post/get
 const expressApp = http();
@@ -59,7 +87,8 @@ expressApp.post('/reset', (req, res) => {
 });
 
 expressApp.post('/win', (req, res) => {
-    console.log("vyhra");
+    //console.log("vyhra");
+    //console.log(req.body);
     db.serialize(() => {
         db.run('UPDATE stats SET win_count = win_count+1 WHERE id = 1');
     });
@@ -67,7 +96,7 @@ expressApp.post('/win', (req, res) => {
 });
 
 expressApp.post('/draw', (req, res) => {
-    console.log("remiza");
+    //console.log("remiza");
     db.serialize(() => {
         db.run('UPDATE stats SET draw_count = draw_count+1 WHERE id = 1');
     });
@@ -75,7 +104,7 @@ expressApp.post('/draw', (req, res) => {
 });
 
 expressApp.post('/loss', (req, res) => {
-    console.log("prohra");
+    //console.log("prohra");
     db.serialize(() => {
         db.run('UPDATE stats SET loss_count = loss_count+1 WHERE id = 1');
     });
@@ -84,10 +113,10 @@ expressApp.post('/loss', (req, res) => {
 
 expressApp.post('/init', (req, res) => {
     if (fs.existsSync("data.db") && fs.existsSync("db-created.nothing")) {
-        console.log("init_prepared_already");
+        //console.log("init_prepared_already");
         res.redirect('./');
     } else {
-        console.log("init");
+        //console.log("init");
         db.serialize(() => {
             db.run('CREATE TABLE stats (id INTEGER NOT NULL DEFAULT 1, win_count INTEGER NOT NULL DEFAULT 0, draw_count INTEGER NOT NULL DEFAULT 0, loss_count INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(id));');
             db.run('INSERT INTO stats VALUES(1,0,0,0)');
@@ -110,7 +139,7 @@ expressApp.get('/getdata', (req, res) => {
     db.serialize(() => {
         db.get('SELECT * FROM stats WHERE id = 1', (err, row) => {
             //console.log(row);
-            res.send({win: row.win_count, draw: row.draw_count, loss: row.loss_count });
+            res.send({ win: row.win_count, draw: row.draw_count, loss: row.loss_count });
         });
     });
     //res.send({win: 0, draw: 0, loss: 0});

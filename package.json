@@ -1,6 +1,6 @@
 {
   "name": "winlossdraw-app",
-  "version": "0.1.1",
+  "version": "0.3.3",
   "description": "simple win loss draw app for me ig",
   "main": "index.js",
   "scripts": {

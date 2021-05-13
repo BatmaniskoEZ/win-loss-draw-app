@@ -6,11 +6,14 @@ const sqlite3 = require('sqlite3').verbose();
 let db = new sqlite3.Database('data.db');
 const fetch = require('node-fetch');
 
+//weird memory shit i had to put this here cuz of
+require('events').EventEmitter.defaultMaxListeners = 4;
+
 //elektron kod
 
 function createWindow() {
     const win = new BrowserWindow({
-        width: 465,
+        width: 270,
         height: 135
     })
     win.removeMenu()
@@ -27,21 +30,21 @@ function createWindow() {
 
     //listeners for shortcuts
     globalShortcut.register('CmdOrCtrl+num7', () => {
-        fetch("http://localhost:90/win",{method: "POST"}).then(res=>{
+        fetch("http://localhost:90/win", { method: "POST" }).then(res => {
             //console.log("win");
         });
         win.loadURL('http://localhost:90/index.html');
     })
 
     globalShortcut.register('CmdOrCtrl+num8', () => {
-        fetch("http://localhost:90/draw", 
-        { 
-            method: "POST",
-            body: {draw: ''},
-            headers: {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"}
-        }).then((res) => {
-            //console.log("draw");
-        });
+        fetch("http://localhost:90/draw",
+            {
+                method: "POST",
+                body: { draw: '' },
+                headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" }
+            }).then((res) => {
+                //console.log("draw");
+            });
         win.loadURL('http://localhost:90/index.html');
     })
 
@@ -77,7 +80,7 @@ expressApp.use(http.json());
 expressApp.use(http.static(__dirname));
 
 expressApp.post('/reset', (req, res) => {
-    console.log("reset");
+    //console.log("reset");
     db.serialize(() => {
         db.run('UPDATE stats SET win_count = 0 WHERE id = 1');
         db.run('UPDATE stats SET draw_count = 0 WHERE id = 1');
@@ -136,12 +139,19 @@ expressApp.get('/', (req, res) => {
 })
 
 expressApp.get('/getdata', (req, res) => {
-    db.serialize(() => {
-        db.get('SELECT * FROM stats WHERE id = 1', (err, row) => {
-            //console.log(row);
-            res.send({ win: row.win_count, draw: row.draw_count, loss: row.loss_count });
+    if (!fs.existsSync("db-created.nothing")) {
+        res.send({ win: 0, draw: 0, loss: 0 });
+        fetch('http://localhost:90/init', { method: 'POST' });
+    } else {
+        db.serialize(() => {
+            db.get('SELECT * FROM stats WHERE id = 1', (err, row) => {
+                //console.log(row);
+                res.send({ win: row.win_count, draw: row.draw_count, loss: row.loss_count });
+            }).on("error", () => {
+                console.log("db error");
+            });
         });
-    });
+    }
     //res.send({win: 0, draw: 0, loss: 0});
 })
 

@@ -25,8 +25,8 @@
     "@electron-forge/maker-rpm": "^6.1.1",
     "@electron-forge/maker-squirrel": "^6.1.1",
     "@electron-forge/maker-zip": "^6.1.1",
-    "electron": "^24.8.5",
-    "nodemon": "^2.0.22"
+    "nodemon": "^3.1.0",
+    "electron": "^24.8.5"
   },
   "config": {
     "forge": {
